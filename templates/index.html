@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaza Population Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f2f2f2;
+        }
+        #counter {
+            font-size: 48px;
+            color: red;
+        }
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Palestinians Remaining in Gaza</h1>
+    <div>
+        <p>Total Killed: <span id="deaths">Loading...</span></p>
+        <p>Total Injured: <span id="injured">Loading...</span></p>
+        <p>Total Missing: <span id="missing">Loading...</span></p>
+        <p>Remaining Population: <span id="counter">Loading...</span></p>
+    </div>
+    <script>
+        const totalPopulation = 200000;
+    
+        async function fetchCasualtyData() {
+            try {
+                const response = await fetch('/get-deaths');
+                const data = await response.json();
+    
+                document.getElementById('deaths').innerText = data.killed.toLocaleString();
+                document.getElementById('injured').innerText = data.injured.toLocaleString();
+                document.getElementById('missing').innerText = data.missing.toLocaleString();
+                document.getElementById('counter').innerText = (totalPopulation - data.killed).toLocaleString();
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+    
+        setInterval(fetchCasualtyData, 50000);  // Update every 5 seconds
+        fetchCasualtyData();
+    </script>
+</body>
+</html>
